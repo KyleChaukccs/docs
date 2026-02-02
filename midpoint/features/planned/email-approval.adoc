@@ -1,0 +1,49 @@
+---
+midpoint-feature: email-approval
+doc-type: plan
+---
+= Email-Based Approval (planned)
+
+
+== Introduction
+
+While midPoint already provides rich approval workflows through its user interface, some scenarios are best served by enabling approvals through email to improve responsiveness and user convenience.
+
+Email-based approval is a well-established pattern commonly used in ITSM platforms, CRM systems (such as Salesforce), and service desks.
+It allows approvers to review and act on approval requests directly from their email client, without explicitly accessing the originating system.
+
+The _email approval_ feature extends midPoint approval capabilities by enabling approvers to:
+
+* Approve or reject requests using simple email reply.
+
+This feature is designed to complement, not replace, existing approval mechanisms.
+It provides an alternative interaction channel optimized for convenience, responsiveness, and organizational reality.
+
+
+== Use Cases
+
+=== Approving Access Request Approval
+
+1. User Received an approval email notification that contains the details of the request, and an "approve" / "reject" button that contains a crafted "mailto" hyperlink.
+2. The user clicks the "approve" button. a new email draft with {workitem.id}-{Decision} is created.
+3. The user leave their comment in the body of the email and hit send.
+4. MidPoint schedules a task to periodically open the mailbox.
+5. MidPoint reads the mails, process the user decision by verifying the sender and the workitem id.
+6. MidPoint moves the processed mail to an archive mailbox.
+7. MidPoint sends an email to the user about the result of the process.
+
+=== Invalid Access Request Approval
+
+1. MidPoint would ignore the following email response.
+- Mail format invalid
+- Unknown workitem ID
+- Mail arrives after expiration
+
+
+
+[CAUTION]
+.Security Assumption
+====
+The integrity of the sender is assumed. Other than the workitem id, which is not considered as a secret known only to the assignee, a one-time token might be added to the enhanced the security of the feature. However, this would also bring complexity on the implementation of the feature and is considered as an add-on rather than compulsory.
+
+====
